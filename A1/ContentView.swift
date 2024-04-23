@@ -9,17 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
     
-    //    13 unique animal emojis
-    let animalEmojis: [String] = ["🐐", "🐕", "🐈", "🐠", "🐡", "🍤", "🦀", "🐍", "🐢", "🦆", "🦅", "🦩", "🦉", "🐐", "🐕", "🐈", "🐠", "🐡", "🍤", "🦀", "🐍", "🐢", "🦆", "🦅", "🦩", "🦉"]
+    let animalEmojis: [String] = ["🐐", "🐕", "🐈", "🐠", "🐡", "🍤", "🦀", "🐐","🐕", "🐈","🐠", "🐡", "🍤", "🦀"]
+    let transportEmojis: [String] = ["🚀", "🚍","🚂","🚀", "🚍","🚂"]
+    let faceEmojis: [String] = ["😁","😆","🥹","😂","😅","🤣","☺️","🥲","😁","😆","🥹","😂","😅","🤣","☺️","🥲"]
     
-    //    11 unique transport emojis
-    let transportEmojis: [String] = ["🚀", "🚍", "🚂", "🚗", "🚑", "🚴🏻", "🏍️", "🚢", "🚣🏽‍♀️", "✈️", "🛺", "🚀", "🚍", "🚂", "🚗", "🚑", "🚴🏻", "🏍️", "🚢", "🚣🏽‍♀️", "✈️", "🛺"]
-    
-    //    22 unique face emojis
-    let faceEmojis: [String] = ["😁", "😆", "🥹", "😂", "😅", "🤣", "☺️", "🥲", "😉", "😇", "🥰", "🥳", "🥸", "😛", "🤓", "🧐", "😎", "😋", "🥵", "😱", "🤥", "🤯", "😁", "😆", "🥹", "😂", "😅", "🤣", "☺️", "🥲", "😉", "😇", "🥰", "🥳", "🥸", "😛", "🤓", "🧐", "😎", "😋", "🥵", "😱", "🤥", "🤯"]
-    
-    @State var theme = "Animal"
-    @State var emojis: [String] = ["🐐", "🐕", "🐈", "🐠", "🐡", "🍤", "🦀", "🐍", "🐢", "🦆", "🦅", "🦩", "🦉", "🐐", "🐕", "🐈", "🐠", "🐡", "🍤", "🦀", "🐍", "🐢", "🦆", "🦅", "🦩", "🦉"]
+    @State var emojis: [String] = ["🐐", "🐕", "🐈", "🐠", "🐡", "🍤", "🦀", "🐐","🐕", "🐈","🐠", "🐡", "🍤", "🦀"]
     @State var themeColor = Color.orange
     
     var body: some View {
@@ -30,9 +24,10 @@ struct ContentView: View {
             
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 72))]) {
-                    ForEach(emojis.shuffled(), id: \.self) { emoji in
-                        CardView(content: emoji)
-                            .aspectRatio(2/3, contentMode: .fill)
+                    ForEach(randomNumArray(emojis.count), id: \.self) { index in
+                        CardView(content: emojis[index - 1])
+                            .aspectRatio(2/3, contentMode: .fit)
+                            .padding(1)
                     }
                     .foregroundStyle(themeColor)
                 }
@@ -41,27 +36,31 @@ struct ContentView: View {
             HStack {
                 Theme(themeName: "Animal", themeImage: "hare.fill")
                     .onTapGesture {
-                        theme = "Animal"
                         emojis = animalEmojis
+                        themeColor = .orange
                     }
                 Spacer()
                 Theme(themeName: "Transport", themeImage: "bus.fill")
                     .onTapGesture {
-                        theme = "Transport"
                         emojis = transportEmojis
                         themeColor = .blue
                     }
                 Spacer()
                 Theme(themeName: "Faces", themeImage: "smiley.fill")
                     .onTapGesture {
-                        theme = "Faces"
                         emojis = faceEmojis
                         themeColor = .red
                     }
             }
             .foregroundStyle(.blue)
         }
-        .padding()
+        .padding(.all)
+    }
+    
+    private func randomNumArray(_ n: Int) -> [Int] {
+        var numbers = Array(1...n)
+        numbers.shuffle()
+        return numbers
     }
 }
 
